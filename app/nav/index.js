@@ -3,7 +3,7 @@
  * @Desc: 导航控制器
  * @Date: 2017-09-17 18:05:35
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-09-17 21:28:56
+ * @Last Modified time: 2017-09-18 15:04:45
  */
 'use strict'
 
@@ -28,37 +28,37 @@ export const Nav = StackNavigator(
   {
     Tab: {
       screen: Tab,
-      navigationOptions: ({ navigation }) => {
+      navigationOptions: ({ navigation, screenProps }) => {
         Actions.init(navigation) // 将 navigation 传给 Action，让 Action 里面可以进行跳转等操作
         return {}
       }
     },
     Login: {
       screen: customNav(Login),
-      navigationOptions: ({ navigation }) => {
+      navigationOptions: ({ navigation, screenProps }) => {
         const params = getParams(navigation)
-        return { title: (params && params.title !== undefined) || 'Login' }
+        return { title: getTitle(params, 'Login') }
       }
     },
     Register: {
       screen: customNav(Register),
-      navigationOptions: ({ navigation }) => {
+      navigationOptions: ({ navigation, screenProps }) => {
         const params = getParams(navigation)
-        return { title: (params && params.title !== undefined) || 'Register' }
+        return { title: getTitle(params, 'Register') }
       }
     },
     Guide: {
       screen: customNav(Guide),
-      navigationOptions: ({ navigation }) => {
+      navigationOptions: ({ navigation, screenProps }) => {
         const params = getParams(navigation)
-        return { title: (params && params.title !== undefined) || `${params.name} Guide` }
+        return { title: getTitle(params, `${params.name} Guide`) }
       }
     },
     MultiNavBtn: {
       screen: customNav(MultiNavBtn),
-      navigationOptions: ({ navigation }) => {
+      navigationOptions: ({ navigation, screenProps }) => {
         const params = getParams(navigation)
-        return { title: (params && params.title !== undefined) || 'MultiNavBtn', headerLeft: params && params.headerLeft ? setupNavigaionBtns(params.headerLeft, false) : null, headerRight: params && params.headerRight ? setupNavigaionBtns(params.headerRight, true) : null }
+        return { title: getTitle(params, 'MultiNavBtn'), headerLeft: params && params.headerLeft ? setupNavigaionBtns(params.headerLeft, false) : null, headerRight: params && params.headerRight ? setupNavigaionBtns(params.headerRight, true) : null }
       }
     }
   },
@@ -77,7 +77,7 @@ export const Nav = StackNavigator(
 function customNav (OriginComponent) {
   return class extends Component {
     render () {
-      this.props.navigation.state.key = OriginComponent.name
+      // this.props.navigation.state.key = OriginComponent.name
       return (<OriginComponent {...this.props} />)
     }
   }
@@ -94,6 +94,10 @@ function getParams (nav) {
     return {}
   }
   return nav.state.params
+}
+
+function getTitle (params, defaultTitle) {
+  return (params && params.title !== undefined) ? params.title : defaultTitle
 }
 
 /**
@@ -124,11 +128,11 @@ function getParams (nav) {
     Actions.push('MultiNavBtn', { headerLeft: btns, headerRight: btns })
 
     // 刷新
-    Actions.refresh(
-        { leftInfos: [
+    Actions.refresh(this.props.navigation,
+        { headerLeft: [
             { onPress: ()=>{this._onPressBack()} },
             { onPress: ()=>{ this._onPressBack(true) }, imgStyle: { width: 18, height: 18 }, source: DEFAULT_BACK_ICON }
-        ] }, 'WebView');
+        ] });
     // 注1：如果第一个按钮不用刷新，就写 {} 就行，如：leftInfo: [{}, {onPress: ()=>{}}]
     // 注2：如果要按钮第二个按钮不显示，置为 null 即可，如：leftInfos:[{}, null]
  *

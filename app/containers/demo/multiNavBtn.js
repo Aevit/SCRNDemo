@@ -3,7 +3,7 @@
  * @Desc: 导栏航添加多个按钮
  * @Date: 2017-09-17 17:15:48
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-09-17 21:34:19
+ * @Last Modified time: 2017-09-18 14:43:04
  */
 'use strict'
 
@@ -20,7 +20,7 @@ export default class MultiNavBtn extends Component {
   _refreshRightBtn () {
     const origin = Actions.getParams(this.props.navigation)
     origin.headerRight[0].title = 'new'
-    Actions.refresh('MultiNavBtn', { headerRight: origin.headerRight })
+    Actions.refresh(this.props.navigation, { headerRight: origin.headerRight })
   }
 
   render () {
@@ -30,7 +30,7 @@ export default class MultiNavBtn extends Component {
           Home: Welcome to React Native!
         </Text>
         <Button title={'pop'} onPress={() => { Actions.pop() }} />
-        <Button title={'refresh title'} onPress={() => { Actions.refresh('MultiNavBtn', { title: 'new title' }) }} />
+        <Button title={'refresh title'} onPress={() => { Actions.refresh(this.props.navigation, { title: 'new title' }) }} />
         <Button title={'refresh right0 title'} onPress={() => { this._refreshRightBtn() }} />
       </View>
     )

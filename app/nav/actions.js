@@ -3,7 +3,7 @@
  * @Desc:
  * @Date: 2017-09-17 18:18:35
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-09-17 21:36:35
+ * @Last Modified time: 2017-09-18 15:04:26
  */
 'use strict'
 
@@ -28,15 +28,24 @@ class Actions {
     this.navigation.goBack(null)
   }
 
-  refresh (key, params) {
-    if (!this.navigation || !key || !params) {
+  popToTop () {
+    if (!this.navigation) {
       return
     }
-    const setParamsAction = NavigationActions.setParams({
-      key: key,
-      params: params
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Tab' })
+      ]
     })
-    this.navigation.dispatch(setParamsAction)
+    this.navigation.dispatch(resetAction)
+  }
+
+  refresh (nav, params) {
+    if (!nav || !nav.setParams || typeof nav.setParams !== 'function' || !params) {
+      return
+    }
+    nav.setParams(params)
   }
 
   getParams (navigation) {

@@ -11,8 +11,10 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native'
+import Actions from '@nav/actions'
 
 export default class Home extends Component {
   render () {
@@ -21,6 +23,8 @@ export default class Home extends Component {
         <Text style={styles.welcome}>
           Login Page
         </Text>
+        <Button title={'push to login'} onPress={() => { Actions.push('Login') }} />
+        <Button title={'pop to top'} onPress={() => { Actions.popToTop() }} />
       </View>
     )
   }
