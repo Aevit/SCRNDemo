@@ -3,7 +3,7 @@
  * @Desc: 首页 tab
  * @Date: 2017-09-17 17:15:48
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-09-17 21:29:25
+ * @Last Modified time: 2017-09-19 17:34:59
  */
 'use strict'
 
@@ -24,18 +24,18 @@ export default class Home extends Component {
       isText: true,
       title: 'left',
       textStyle: { color: 'black' },
-      onPress: () => { alert('left') }
+      onPress: () => { alert('left') } // eslint-disable-line
     }]
     const rightBtns = [{
       isText: true,
       title: 'right0',
       textStyle: { color: 'black' },
-      onPress: () => { alert('right_0') }
+      onPress: () => { alert('right_0') } // eslint-disable-line
     }, {
       isText: true,
       title: 'right1',
       textStyle: { color: 'black' },
-      onPress: () => { alert('right_1') }
+      onPress: () => { alert('right_1') } // eslint-disable-line
     }]
     Actions.push('MultiNavBtn', { headerLeft: leftBtns, headerRight: rightBtns })
   }

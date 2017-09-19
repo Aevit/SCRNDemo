@@ -3,7 +3,7 @@
  * @Desc: tab
  * @Date: 2017-09-17 17:15:48
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-09-17 18:45:22
+ * @Last Modified time: 2017-09-19 17:33:50
  */
 'use strict'
 
@@ -45,6 +45,7 @@ export const Tab = TabNavigator(
     }
   }, {
     tabBarComponent: TabBarBottom,
+    tabBarPosition: 'bottom',
     swipeEnabled: false,
     animationEnabled: false,
     lazy: true
