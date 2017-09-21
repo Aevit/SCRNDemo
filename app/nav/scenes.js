@@ -3,7 +3,7 @@
  * @Desc: 导航控制器
  * @Date: 2017-09-17 18:05:35
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-09-19 14:52:58
+ * @Last Modified time: 2017-09-20 18:05:13
  */
 'use strict'
 
@@ -21,6 +21,7 @@ import Login from '../containers/auth/login'
 import Register from '../containers/auth/register'
 import Guide from '../containers/guide'
 import MultiNavBtn from '../containers/demo/multiNavBtn'
+import SCWebView from '../containers/SCWebView'
 import SwitchScroll from '../containers/demo/switchScroll'
 
 const DEFAULT_BACK_ICON = require('SCRNDemo/app/resources/images/back_icon_1.png')
@@ -62,6 +63,13 @@ export const Nav = StackNavigator(
         return { title: getTitle(params, 'MultiNavBtn'), headerLeft: params && params.headerLeft ? setupNavigaionBtns(params.headerLeft, false) : null, headerRight: params && params.headerRight ? setupNavigaionBtns(params.headerRight, true) : null }
       }
     },
+    SCWebView: {
+      screen: customNav(SCWebView),
+      navigationOptions: ({ navigation, screenProps }) => {
+        const params = getParams(navigation)
+        return { title: getTitle(params, '') }
+      }
+    },
     SwitchScroll: {
       screen: customNav(SwitchScroll),
       navigationOptions: ({ navigation, screenProps }) => {
@@ -86,7 +94,8 @@ function customNav (OriginComponent) {
   return class extends Component {
     render () {
       // this.props.navigation.state.key = OriginComponent.name
-      return (<OriginComponent {...this.props} />)
+      const params = this.props.navigation ? this.props.navigation.state.params : {}
+      return (<OriginComponent {...this.props} {...params} />)
     }
   }
 }
@@ -104,7 +113,7 @@ function getParams (nav) {
   return nav.state.params
 }
 
-function getTitle (params, defaultTitle) {
+function getTitle (params, defaultTitle = '') {
   return (params && params.title !== undefined) ? params.title : defaultTitle
 }
 
