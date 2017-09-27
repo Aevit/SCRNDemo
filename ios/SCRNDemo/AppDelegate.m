@@ -8,9 +8,9 @@
  */
 
 #import "AppDelegate.h"
-
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import "SCDebugBridge.h"
 
 @implementation AppDelegate
 
@@ -18,8 +18,13 @@
 {
   NSURL *jsCodeLocation;
 
+#ifdef DEBUG
+  NSDictionary *ipAndPort = [SCDebugBridge getIpAndPort];
+  jsCodeLocation = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%@/index.ios.bundle?platform=ios&dev=true&minify=false", ipAndPort[@"ip"], ipAndPort[@"port"]]];
+#else
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
-
+#endif
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"SCRNDemo"
                                                initialProperties:nil
