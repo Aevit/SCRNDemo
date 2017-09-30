@@ -3,7 +3,7 @@
  * @Desc: 导航控制器
  * @Date: 2017-09-17 18:05:35
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-09-20 18:05:13
+ * @Last Modified time: 2017-09-29 10:58:22
  */
 'use strict'
 
@@ -23,6 +23,7 @@ import Guide from '../containers/guide'
 import MultiNavBtn from '../containers/demo/multiNavBtn'
 import SCWebView from '../containers/SCWebView'
 import SwitchScroll from '../containers/demo/switchScroll'
+import ArtDemo from '../containers/demo/svg/artDemo'
 
 const DEFAULT_BACK_ICON = require('SCRNDemo/app/resources/images/back_icon_1.png')
 
@@ -75,6 +76,13 @@ export const Nav = StackNavigator(
       navigationOptions: ({ navigation, screenProps }) => {
         const params = getParams(navigation)
         return { title: getTitle(params, 'SwitchScroll') }
+      }
+    },
+    ArtDemo: {
+      screen: customNav(ArtDemo),
+      navigationOptions: ({ navigation, screenProps }) => {
+        const params = getParams(navigation)
+        return { title: getTitle(params, 'Svg') }
       }
     }
   },

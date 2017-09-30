@@ -3,7 +3,7 @@
  * @Desc: 首页 tab
  * @Date: 2017-09-17 17:15:48
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-09-20 18:13:05
+ * @Last Modified time: 2017-09-28 16:42:12
  */
 'use strict'
 
@@ -49,6 +49,7 @@ export default class Home extends Component {
         <Button title={'push to MultiNavBtn'} onPress={() => { this._gotoMultiNavBtnPage() }} />
         <Button title={'push to WebView'} onPress={() => { Actions.push('SCWebView', { title: '网页', url: 'https://www.baidu.com' }) }} />
         <Button title={'push to SwitchScroll'} onPress={() => { Actions.push('SwitchScroll') }} />
+        <Button title={'push to ArtDemo'} onPress={() => { Actions.push('ArtDemo') }} />
       </View>
     )
   }
