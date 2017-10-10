@@ -3,43 +3,20 @@
  * @Desc:
  * @Date: 2017-09-28 16:14:25
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-10-09 18:12:50
+ * @Last Modified time: 2017-10-10 11:52:11
  */
 'use strict'
 import {
   StyleSheet,
   View,
-  ART,
   Animated
 } from 'react-native'
 import React from 'react'
-const { Surface, Shape, Group, Path } = ART
-
-class Circle extends React.Component {
-  circlePath (cx, cy, r, startDegree, endDegree) {
-    let p = Path()
-    p.path.push(0, cx, cy - r)
-    p.path.push(4, cx, cy, r, startDegree * Math.PI / 180, endDegree * Math.PI / 180, 1) // 第一个 4 是画弧（可查看 ./node_modules/react-native/Libraries/ART/RCTConvert+ART.m 里 “ + (CGPathRef)CGPath:(id)json ” 方法）
-    return p
-  }
-
-  render () {
-    const size = 200
-    const strokeWidth = 2
-    const circlePath = this.circlePath(size / 2, size / 2, size / 2 - strokeWidth / 2, 270, 270 + 360 * this.props.fill / 100)
-    return (
-      <View>
-        <Surface width={this.props.width || 300} height={this.props.height || 300}>
-          <Group>
-            <Shape d={circlePath} stroke='#000000' strokeWidth={strokeWidth} />
-          </Group>
-        </Surface>
-      </View>
-    )
-  }
-}
+import Circle from './shapes/circle'
+import Hook from './shapes/hook'
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
+const AnimatedHook = Animated.createAnimatedComponent(Hook)
 
 export default class svg extends React.Component {
   static propTypes = {};
@@ -49,23 +26,47 @@ export default class svg extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      circleProgress: new Animated.Value(0)
+      circleProgress: new Animated.Value(0),
+      fristLineAnimation: new Animated.Value(0),
+      secondLineAnimation: new Animated.Value(0)
     }
   }
 
   // ----- components
   render () {
     setTimeout(() => {
+      // circle
       Animated.timing(this.state.circleProgress, {
         toValue: 100,
         duration: 300
       }).start()
+
+      // hook
+      Animated.sequence([
+        Animated.timing(this.state.fristLineAnimation, {
+          toValue: 1,
+          duration: 300
+        }),
+        Animated.timing(this.state.secondLineAnimation, {
+          toValue: 1,
+          duration: 300
+        })
+      ]).start()
     }, 1000)
 
+    const firstLinePath = this.state.fristLineAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['M 0,20 L 0,20', 'M 0,20 L 20,40']
+    })
+    const secondLinePath = this.state.secondLineAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['M 20,40 L 20,40', 'M 20,40 L 40,0']
+    })
     return (
       <View style={styles.outter}>
         <View style={styles.box}>
           <AnimatedCircle fill={this.state.circleProgress} />
+          <AnimatedHook firstLinePath={firstLinePath} secondLinePath={secondLinePath} />
         </View>
       </View>
     )
