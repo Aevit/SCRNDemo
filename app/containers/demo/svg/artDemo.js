@@ -3,7 +3,7 @@
  * @Desc:
  * @Date: 2017-09-28 16:14:25
  * @Last Modified by: Aevit
- * @Last Modified time: 2017-10-10 11:52:11
+ * @Last Modified time: 2017-10-14 17:10:43
  */
 'use strict'
 import {
@@ -17,6 +17,7 @@ import Hook from './shapes/hook'
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 const AnimatedHook = Animated.createAnimatedComponent(Hook)
+const hookBoxSize = 100
 
 export default class svg extends React.Component {
   static propTypes = {};
@@ -32,41 +33,61 @@ export default class svg extends React.Component {
     }
   }
 
+  _getHookLinePath (index) {
+    const half = hookBoxSize / 2
+    const middlePoint = `${half - hookBoxSize / 8},${hookBoxSize - hookBoxSize / 8}`
+    if (index === 0) {
+      // 第一条线
+      return this.state.fristLineAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [`M 0,${half} L 0,${half}`, `M 0,${half} L ${middlePoint}`]
+      })
+    }
+    if (index === 1) {
+      // 第二条线
+      return this.state.secondLineAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [`M ${middlePoint} L ${middlePoint}`, `M ${middlePoint} L ${hookBoxSize},0`]
+      })
+    }
+  }
   // ----- components
   render () {
     setTimeout(() => {
       // circle
       Animated.timing(this.state.circleProgress, {
-        toValue: 100,
-        duration: 300
+        toValue: 1, // TODO: 超出 1 的要限制一下
+        duration: 1500
       }).start()
 
       // hook
       Animated.sequence([
         Animated.timing(this.state.fristLineAnimation, {
           toValue: 1,
-          duration: 300
+          duration: 750
         }),
         Animated.timing(this.state.secondLineAnimation, {
           toValue: 1,
-          duration: 300
+          duration: 750
         })
       ]).start()
-    }, 1000)
+    }, 300)
 
-    const firstLinePath = this.state.fristLineAnimation.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['M 0,20 L 0,20', 'M 0,20 L 20,40']
-    })
-    const secondLinePath = this.state.secondLineAnimation.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['M 20,40 L 20,40', 'M 20,40 L 40,0']
-    })
+    const strokeWidth = 2
     return (
       <View style={styles.outter}>
         <View style={styles.box}>
-          <AnimatedCircle fill={this.state.circleProgress} />
-          <AnimatedHook firstLinePath={firstLinePath} secondLinePath={secondLinePath} />
+          <AnimatedCircle
+            style={{ width: 200, height: 200, backgroundColor: '#d8d8d8' }}
+            progress={this.state.circleProgress}
+          />
+          <AnimatedHook
+            style={{ width: hookBoxSize + strokeWidth, height: hookBoxSize + strokeWidth, backgroundColor: '#d8d8d8', marginTop: 20 }}
+            strokeColor={'black'}
+            strokeWidth={strokeWidth}
+            firstLinePath={this._getHookLinePath(0)}
+            secondLinePath={this._getHookLinePath(1)}
+          />
         </View>
       </View>
     )
